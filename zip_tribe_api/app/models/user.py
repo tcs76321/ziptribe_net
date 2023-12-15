@@ -1,15 +1,15 @@
-from fastapi import FastAPI, Header, HTTPException
-from pydantic import BaseModel, validator
+from datetime import datetime
+from pydantic import BaseModel, Field
 
 
 class User(BaseModel):
     username: str
     first_name: str
     last_name: str
-    middle_name: Optional[str] = None
+    middle_name: str = None  # Optional
     dob: datetime.date
-    email: email_validator.EmailStr
-    phone: phone_validator.PhoneNumber
-    zipcode: zipcode_validator.ZipCode
+    email:
+    phone:
+    zipcode:
     password: str
     active: bool = True
