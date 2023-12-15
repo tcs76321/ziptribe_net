@@ -26,11 +26,13 @@ const useZipTribeAPI = <T>(endpoint: string, config?: RequestConfig): UseZipTrib
                     signal: abortController.signal,
                     method: config?.method || 'GET',
                     headers: config?.headers || {},
-                    body: config?.body || null
+                    body: config?.body === undefined ? null : config?.body, // Check for undefined to avoid empty body
                 });
 
                 if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+                    const text = await response.text();
+                    const errorText = response.status === 400 ? `Bad request: ${text}` : `HTTP error! status: ${response.status}`;
+                    throw new Error(errorText); // More specific error message based on status code
                 }
 
                 const json = await response.json();
@@ -49,9 +51,7 @@ const useZipTribeAPI = <T>(endpoint: string, config?: RequestConfig): UseZipTrib
         };
 
         fetchData();
-        return () => {
-            abortController.abort();
-        };
+        return () => abortController.abort();
     }, [endpoint, config]);
 
     return { data, loading, error };
