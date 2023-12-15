@@ -1,31 +1,47 @@
 import { useState, useEffect } from 'react';
 
-interface UseZipTribeHook {
-    data: any; // Replace 'any' with a more specific type based on what data you expect
+interface UseZipTribeHook<T> {
+    data: T | null;
     loading: boolean;
     error: string | null;
 }
 
-const useZipTribeAPI = (endpoint: string): UseZipTribeHook => {
-    const [data, setData] = useState<any>(null); // Replace 'any' with a specific type
+interface RequestConfig {
+    method?: string;
+    headers?: HeadersInit;
+    body?: BodyInit | null;
+}
+
+const useZipTribeAPI = <T>(endpoint: string, config?: RequestConfig): UseZipTribeHook<T> => {
+    const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
 
     useEffect(() => {
+        const abortController = new AbortController();
         const fetchData = async () => {
             setLoading(true);
             try {
-                const response = await fetch(`[Your FastAPI Server URL]/${endpoint}`);
+                const response = await fetch(`[Your FastAPI Server URL]/${endpoint}`, {
+                    signal: abortController.signal,
+                    method: config?.method || 'GET',
+                    headers: config?.headers || {},
+                    body: config?.body || null
+                });
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
+
                 const json = await response.json();
                 setData(json);
             } catch (e) {
-                if (e instanceof Error) {
-                    setError(e.message);
-                } else {
-                    setError('An unexpected error occurred');
+                if (!abortController.signal.aborted) {
+                    if (e instanceof Error) {
+                        setError(e.message);
+                    } else {
+                        setError('An unexpected error occurred');
+                    }
                 }
             } finally {
                 setLoading(false);
@@ -33,8 +49,10 @@ const useZipTribeAPI = (endpoint: string): UseZipTribeHook => {
         };
 
         fetchData();
-    }, [endpoint]);
-
+        return () => {
+            abortController.abort();
+        };
+    }, [endpoint, config]);
 
     return { data, loading, error };
 };
