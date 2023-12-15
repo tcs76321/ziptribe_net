@@ -4,6 +4,7 @@ interface UseZipTribeHook<T> {
     data: T | null;
     loading: boolean;
     error: string | null;
+    setError: (error: string | null) => void;
 }
 
 interface RequestConfig {
@@ -54,7 +55,7 @@ const useZipTribeAPI = <T>(endpoint: string, config?: RequestConfig): UseZipTrib
         return () => abortController.abort();
     }, [endpoint, config]);
 
-    return { data, loading, error };
+    return { data, loading, error, setError };
 };
 
 export default useZipTribeAPI;
