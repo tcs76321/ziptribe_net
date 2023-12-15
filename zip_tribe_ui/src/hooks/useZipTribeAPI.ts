@@ -28,6 +28,7 @@ const useZipTribeAPI = <T>(endpoint: string, config?: RequestConfig): UseZipTrib
     const [data, setData] = useState<T | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
     const [error, setError] = useState<string | null>(null);
+    // const setError = (error: string) => setError(error);
 
     // Abort controller for canceling requests
     const abortController = new AbortController();

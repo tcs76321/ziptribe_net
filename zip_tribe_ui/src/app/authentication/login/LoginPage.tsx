@@ -1,31 +1,49 @@
+// Import necessary libraries
 import React, { useState } from 'react';
 import useZipTribeAPI from '../../../hooks/useZipTribeAPI';
 
 function LoginPage() {
+    // State variables for username, password, and error
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const { data, loading, setError } = useZipTribeAPI('/login', {
+    const [error, setError] = useState<string | null>(null); // Explicitly define type for error
+
+    // Use the `useZipTribeAPI` hook
+    const { data, loading } = useZipTribeAPI('/login', { // Only use data and loading from the hook
         method: 'POST',
         body: JSON.stringify({ username, password }),
     });
 
-    const handleSubmit = async (e) => {
+    // Address "e implicitly has an any type" error
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         if (!username || !password) {
-            setError('Please fill in all fields.'); // Use setError from the hook
+            setError('Please fill in all fields.'); // Use setError from state
             return;
         }
         try {
-            await useZipTribeAPI('/login', {
-                method: 'POST',
-                body: JSON.stringify({ username, password }),
-            });
             // Handle successful login: navigate to home page, store token etc.
+            // This logic depends on your API response format and desired actions
+            if (data) {
+                // TODO: Implement logic to navigate to home page and store token based on data
+                console.log('Successful login!', data);
+            } else {
+                // TODO: Handle potential successful login scenarios without data
+                console.log('Successful login without data!');
+            }
         } catch (error) {
-            setError(error.message); // Use the actual error message
+            // Use the actual error message from the catch block
+            if (error instanceof Error) {
+                // Now TypeScript knows that error is an Error object and has a message property
+                setError(error.message);
+            } else {
+                // Fallback error message for cases where error is not an Error object
+                setError('An unexpected error occurred.');
+            }
         }
     };
 
+    // Render the login form
     return (
         <form onSubmit={handleSubmit}>
             <input
