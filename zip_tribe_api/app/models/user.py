@@ -8,8 +8,8 @@ class User(BaseModel):
     last_name: str
     middle_name: str = None  # Optional
     dob: datetime.date
-    email:
-    phone:
-    zipcode:
+    # email:
+    # phone:
+    # zipcode:
     password: str
     active: bool = True
