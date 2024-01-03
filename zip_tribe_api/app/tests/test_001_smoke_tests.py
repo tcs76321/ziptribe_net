@@ -12,5 +12,4 @@ def test_truth_is_true():
 
 def test_login_no_auth():
     response = client.get("/login")
-    assert response.status_code != 200
-    # assert response.status_code == 401
+    assert response.status_code == 401
