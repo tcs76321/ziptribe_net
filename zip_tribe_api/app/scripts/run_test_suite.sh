@@ -1,4 +1,4 @@
 #!/bin/bash
 
 # Run test suite
-pytest
+pytest app/tests/
