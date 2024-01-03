@@ -1,9 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, status
 
 router = APIRouter()
 
 
-# TODO: finish this
-@router.get("/login", tags=["users"])
+@router.get("/login/", tags=["users"], status_code=status.HTTP_401_UNAUTHORIZED)
 def login():
-    return {"login": "login"}
+    return {"Unauthorized": "Denied"}

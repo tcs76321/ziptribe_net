@@ -13,6 +13,5 @@ MacOS: brew install pyenv
 pip install -r requirements.txt
 ```
 
-## Scripts
-`scripts/run_test_suite.sh` - runs the unit test suite
-`scripts/start_dev_server.sh` - starts the app in development mode
+## Scripts/
+You can run these scripts or just copy and paste the commands into your terminal.
