@@ -1,6 +1,14 @@
 from fastapi import APIRouter
 
-router = APIRouter()
+name = "profile"
+router = APIRouter(
+    prefix="/" + name,
+    tags=[name],
+    dependencies=[],
+    responses={
+        404: {"description": "Not found"},
+    },
+)
 
 
 # TODO: finish this

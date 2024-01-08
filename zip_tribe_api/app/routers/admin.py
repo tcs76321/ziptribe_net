@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-name = "feed"
+name = "admin"
 router = APIRouter(
     prefix="/" + name,
     tags=[name],
@@ -11,7 +11,6 @@ router = APIRouter(
 )
 
 
-# TODO: finish this
 @router.get()
-def login():
-    return {"feed": "feed"}
+def admin():
+    return {"admin": "admin"}
