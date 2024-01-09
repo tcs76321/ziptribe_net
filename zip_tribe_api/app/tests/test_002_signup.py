@@ -45,7 +45,13 @@ def test_new_user_invalid_dob():
             "username": "testuser123",
             "email": "valid@test.com",
             "password": "password",
-
+            "first_name": "Test",
+            "last_name": "User",
+            "dob": "NOT_A_DATE",
+        },
+    )
+    assert response.status_code == 400
+    assert response.json() == {"detail": "Invalid date of birth"}
 
 
 def test_new_user():
